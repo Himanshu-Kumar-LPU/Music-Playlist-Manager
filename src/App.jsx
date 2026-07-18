@@ -79,7 +79,7 @@ function App() {
                 <h1 className="text-lg font-semibold sm:text-xl"></h1>
               </div>
               <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-                <nav className="hidden gap-1 rounded-full border border-white/10 bg-white/5 p-1 sm:flex">
+                <nav className="flex gap-1 rounded-full border border-white/10 bg-white/5 p-1 overflow-x-auto">
                   <NavLink to="/" className={({ isActive }) => `rounded-full px-2 py-2 text-xs sm:px-3 sm:text-sm ${isActive ? 'bg-gradient-to-r from-purple-600 to-cyan-500' : 'text-slate-300'}`}>
                     Home
                   </NavLink>
