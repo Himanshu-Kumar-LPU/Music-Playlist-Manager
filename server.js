@@ -3,7 +3,6 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-import nodemailer from 'nodemailer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -40,7 +39,7 @@ function generateOtp() {
   return String(Math.floor(100000 + Math.random() * 900000));
 }
 
-function sendEmail({ email, subject, text }) {
+async function sendEmail({ email, subject, text }) {
   const fallbackEnabled = process.env.DEV_EMAIL_FALLBACK === 'true';
 
   if (fallbackEnabled) {
@@ -56,26 +55,44 @@ function sendEmail({ email, subject, text }) {
     throw new Error('SENDGRID_API_KEY and EMAIL_USER must be set in .env');
   }
 
-  // Use SendGrid via nodemailer SMTP relay
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.sendgrid.net',
-    port: 587,
-    secure: false,
-    auth: {
-      user: 'apikey',
-      pass: sendgridApiKey,
-    },
-  });
+  // Use SendGrid HTTP API (works on Render; doesn't require SMTP port 587)
+  try {
+    const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${sendgridApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        personalizations: [
+          {
+            to: [{ email }],
+            subject,
+          },
+        ],
+        from: {
+          email: emailUser,
+          name: 'Music Playlist Manager',
+        },
+        content: [
+          {
+            type: 'text/plain',
+            value: text,
+          },
+        ],
+      }),
+    });
 
-  return transporter.sendMail({
-    from: `Music Playlist Manager <${emailUser}>`,
-    to: email,
-    subject,
-    text,
-  }).catch((error) => {
-    console.error('SendGrid send failed:', error);
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`SendGrid API error: ${response.status} - ${error}`);
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error('SendGrid HTTP API send failed:', error);
     throw error;
-  });
+  }
 }
 
 app.use(express.json());
