@@ -9,9 +9,9 @@ dist/
 build/
 *.tsbuildinfo
 
-# WASM build artifacts
-src/wasm/dsa.js
-src/wasm/dsa.wasm
+# WASM build artifacts (INCLUDE pre-built files for deployment)
+# src/wasm/dsa.js
+# src/wasm/dsa.wasm
 
 # Environment files (NEVER commit credentials!)
 .env
