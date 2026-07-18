@@ -114,14 +114,14 @@ export default function AuthScreen({ onAuthenticate }) {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.16),_transparent_35%),linear-gradient(135deg,_#020617,_#111827_60%,_#0f172a)] px-4 py-12 text-slate-100">
-      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-slate-950/80 px-8 py-10 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl">
+    <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.16),_transparent_35%),linear-gradient(135deg,_#020617,_#111827_60%,_#0f172a)] px-3 py-8 sm:px-4 sm:py-12 text-slate-100">
+      <div className="w-full max-w-md rounded-2xl sm:rounded-3xl border border-white/10 bg-slate-950/80 px-4 py-8 sm:px-8 sm:py-10 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl">
         <div className="mb-4 text-center">
-          <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">Secure login</p>
-          <h2 className="mt-1.5 text-3xl font-semibold text-white">
+          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] sm:tracking-[0.35em] text-cyan-300">Secure login</p>
+          <h2 className="mt-1.5 text-2xl sm:text-3xl font-semibold text-white">
             {mode === 'signin' ? 'Sign in with OTP' : 'Sign up with OTP'}
           </h2>
-          <p className="mt-3 text-sm text-slate-400">
+          <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-slate-400">
             {mode === 'signin'
               ? "Enter your email and we'll send you a one-time code."
               : 'Enter your details to create your account.'}

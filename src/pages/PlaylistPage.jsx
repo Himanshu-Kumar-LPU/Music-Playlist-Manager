@@ -11,8 +11,8 @@ export default function PlaylistPage() {
     <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
       <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
-          <h2 className="text-2xl font-semibold">My Playlist</h2>
-          <p className="text-sm text-slate-400">{playlistSongs.length} track{playlistSongs.length !== 1 ? 's' : ''} in your custom mix</p>
+          <h2 className="text-xl sm:text-2xl font-semibold">My Playlist</h2>
+          <p className="text-xs sm:text-sm text-slate-400">{playlistSongs.length} track{playlistSongs.length !== 1 ? 's' : ''} in your custom mix</p>
         </div>
       </div>
       {playlistSongs.length === 0 ? (
@@ -27,15 +27,15 @@ export default function PlaylistPage() {
           </Link>
         </div>
       ) : (
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-6 grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
           {playlistSongs.map((song) => (
             <motion.article
               key={song.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/30 shadow-[0_20px_45px_rgba(15,23,42,0.35)]"
+              className="overflow-hidden rounded-xl sm:rounded-[1.5rem] border border-white/10 bg-black/30 shadow-[0_20px_45px_rgba(15,23,42,0.35)]"
             >
-              <img src={song.cover} alt={song.title} className="h-36 w-full object-cover" />
+              <img src={song.cover} alt={song.title} className="h-28 w-full object-cover sm:h-32 md:h-36" />
               <div className="p-4">
                 <h3 className="font-semibold text-white">{song.title}</h3>
                 <p className="text-sm text-slate-400">{song.artist}</p>

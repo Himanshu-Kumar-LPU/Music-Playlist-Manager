@@ -73,23 +73,23 @@ function App() {
             <div className="h-full rounded-full bg-gradient-to-r from-purple-600 via-cyan-500 to-fuchsia-500 transition-all" style={{ width: `${scrollProgress}%` }} />
           </div>
           <header className="sticky top-0 z-20 border-b border-white/10 bg-black/40 backdrop-blur-xl">
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-8">
-              <div>
-                <p className="text-sm uppercase tracking-[0.4em] text-cyan-300">Music Playlist Manager</p>
-                <h1 className="text-xl font-semibold"></h1>
+            <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-3 py-3 sm:px-4 sm:py-4 md:px-8">
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-xs uppercase tracking-[0.3em] text-cyan-300 sm:text-sm sm:tracking-[0.4em]">Music Playlist Manager</p>
+                <h1 className="text-lg font-semibold sm:text-xl"></h1>
               </div>
-              <div className="flex items-center gap-3">
-                <nav className="flex gap-2 rounded-full border border-white/10 bg-white/5 p-1">
-                  <NavLink to="/" className={({ isActive }) => `rounded-full px-3 py-2 text-sm ${isActive ? 'bg-gradient-to-r from-purple-600 to-cyan-500' : 'text-slate-300'}`}>
+              <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+                <nav className="hidden gap-1 rounded-full border border-white/10 bg-white/5 p-1 sm:flex">
+                  <NavLink to="/" className={({ isActive }) => `rounded-full px-2 py-2 text-xs sm:px-3 sm:text-sm ${isActive ? 'bg-gradient-to-r from-purple-600 to-cyan-500' : 'text-slate-300'}`}>
                     Home
                   </NavLink>
-                  <NavLink to="/playlist" className={({ isActive }) => `rounded-full px-3 py-2 text-sm ${isActive ? 'bg-gradient-to-r from-purple-600 to-cyan-500' : 'text-slate-300'}`}>
+                  <NavLink to="/playlist" className={({ isActive }) => `rounded-full px-2 py-2 text-xs sm:px-3 sm:text-sm ${isActive ? 'bg-gradient-to-r from-purple-600 to-cyan-500' : 'text-slate-300'}`}>
                     Playlist
                   </NavLink>
-                  <NavLink to="/favorites" className={({ isActive }) => `rounded-full px-3 py-2 text-sm ${isActive ? 'bg-gradient-to-r from-purple-600 to-cyan-500' : 'text-slate-300'}`}>
+                  <NavLink to="/favorites" className={({ isActive }) => `rounded-full px-2 py-2 text-xs sm:px-3 sm:text-sm ${isActive ? 'bg-gradient-to-r from-purple-600 to-cyan-500' : 'text-slate-300'}`}>
                     Favorites
                   </NavLink>
-                  <NavLink to="/recent" className={({ isActive }) => `rounded-full px-3 py-2 text-sm ${isActive ? 'bg-gradient-to-r from-purple-600 to-cyan-500' : 'text-slate-300'}`}>
+                  <NavLink to="/recent" className={({ isActive }) => `rounded-full px-2 py-2 text-xs sm:px-3 sm:text-sm ${isActive ? 'bg-gradient-to-r from-purple-600 to-cyan-500' : 'text-slate-300'}`}>
                     Recent
                   </NavLink>
                 </nav>
@@ -128,7 +128,7 @@ function App() {
             </div>
           </header>
 
-          <main className="mx-auto max-w-7xl px-4 py-8 md:px-8">
+          <main className="mx-auto max-w-7xl px-3 py-6 sm:px-4 sm:py-8 md:px-8">
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/playlist" element={<PlaylistPage />} />

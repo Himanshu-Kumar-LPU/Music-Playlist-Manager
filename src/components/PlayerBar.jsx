@@ -136,38 +136,38 @@ export default function PlayerBar() {
   };
 
   return (
-    <div className="border-t border-white/10 bg-black/85 p-4 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex items-center gap-3">
-          <img src={currentSong?.cover} alt={currentSong?.title} className="h-14 w-14 rounded-xl object-cover shadow-lg shadow-black/40" />
-          <div>
-            <p className="font-semibold text-white">{currentSong?.title}</p>
-            <p className="text-sm text-slate-400">{currentSong?.artist}</p>
+    <div className="border-t border-white/10 bg-black/85 p-2 sm:p-4 backdrop-blur-xl\">
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 sm:gap-4 lg:flex-row lg:items-center lg:justify-between\">
+        <div className=\"flex items-center gap-2 sm:gap-3 min-w-0\">
+          <img src={currentSong?.cover} alt={currentSong?.title} className=\"h-12 w-12 sm:h-14 sm:w-14 rounded-lg sm:rounded-xl object-cover shadow-lg shadow-black/40 flex-shrink-0\" />
+          <div className=\"min-w-0\">
+            <p className=\"font-semibold text-white text-sm sm:text-base truncate\">{currentSong?.title}</p>
+            <p className=\"text-xs sm:text-sm text-slate-400 truncate\">{currentSong?.artist}</p>
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-2 lg:max-w-2xl">
-          <div className="flex items-center justify-center gap-3">
-            <button className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-300" onClick={handlePrev}><FaBackward /></button>
-            <button className="rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 p-3 text-white shadow-lg shadow-cyan-500/20 transition hover:scale-105" onClick={togglePlayback}>{isPlaying ? <FaPause /> : <FaPlay />}</button>
-            <button className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-300" onClick={handleNext}><FaForward /></button>
-            <button className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-300" onClick={playNextQueued}>Up next</button>
+        <div className=\"flex flex-1 flex-col gap-2 lg:max-w-2xl\">
+          <div className=\"flex items-center justify-center gap-2 sm:gap-3\">
+            <button className=\"rounded-full border border-white/10 bg-white/5 p-2 sm:p-2.5 text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-300\" onClick={handlePrev} aria-label=\"Previous\"><FaBackward className=\"text-xs sm:text-sm\" /></button>
+            <button className=\"rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 p-3 sm:p-3.5 text-white shadow-lg shadow-cyan-500/20 transition hover:scale-105\" onClick={togglePlayback} aria-label=\"Play/Pause\">{isPlaying ? <FaPause className=\"text-sm sm:text-base\" /> : <FaPlay className=\"text-sm sm:text-base\" />}</button>
+            <button className=\"rounded-full border border-white/10 bg-white/5 p-2 sm:p-2.5 text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-300\" onClick={handleNext} aria-label=\"Next\"><FaForward className=\"text-xs sm:text-sm\" /></button>
+            <button className=\"hidden sm:flex rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-300\" onClick={playNextQueued}>Up next</button>
           </div>
-          <div className="flex items-center gap-2 text-sm text-slate-400">
-            <span>{formatTime(progress)}</span>
-            <input type="range" min="0" max={duration || 100} value={progress} onChange={(event) => { setProgress(Number(event.target.value)); if (audioRef.current) audioRef.current.currentTime = Number(event.target.value); }} className="flex-1 accent-cyan-400" />
-            <span>{formatTime(duration || currentSong?.duration || 0)}</span>
+          <div className=\"flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-slate-400\">
+            <span className=\"w-8 sm:w-10 text-right\">{formatTime(progress)}</span>
+            <input type=\"range\" min=\"0\" max={duration || 100} value={progress} onChange={(event) => { setProgress(Number(event.target.value)); if (audioRef.current) audioRef.current.currentTime = Number(event.target.value); }} className=\"flex-1 accent-cyan-400 h-1 sm:h-1.5\" aria-label=\"Progress\" />
+            <span className=\"w-8 sm:w-10\">{formatTime(duration || currentSong?.duration || 0)}</span>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <button className={`rounded-full border border-white/10 bg-white/5 p-2 transition ${repeatMode !== 'off' ? 'text-cyan-400' : 'text-slate-200'}`} onClick={cycleRepeat}><FaRedo /></button>
-          <button className={`rounded-full border border-white/10 bg-white/5 p-2 transition ${shuffleEnabled ? 'text-cyan-400' : 'text-slate-200'}`} onClick={() => { setShuffleEnabled((prev) => !prev); shufflePlaylist(); }}><FaRandom /></button>
-          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2">
-            <FaVolumeUp className="text-slate-300" />
-            <input type="range" min="0" max="1" step="0.05" value={volume} onChange={(event) => setVolume(Number(event.target.value))} className="accent-cyan-400" />
+        <div className=\"flex items-center justify-end gap-2 sm:gap-3\">
+          <button className={`rounded-full border border-white/10 bg-white/5 p-2 sm:p-2.5 transition ${repeatMode !== 'off' ? 'text-cyan-400' : 'text-slate-200'}`} onClick={cycleRepeat} aria-label=\"Repeat\"><FaRedo className=\"text-xs sm:text-sm\" /></button>
+          <button className={`rounded-full border border-white/10 bg-white/5 p-2 sm:p-2.5 transition ${shuffleEnabled ? 'text-cyan-400' : 'text-slate-200'}`} onClick={() => { setShuffleEnabled((prev) => !prev); shufflePlaylist(); }} aria-label=\"Shuffle\"><FaRandom className=\"text-xs sm:text-sm\" /></button>
+          <div className=\"hidden sm:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2\">
+            <FaVolumeUp className=\"text-slate-300 text-xs sm:text-sm\" />
+            <input type=\"range\" min=\"0\" max=\"1\" step=\"0.05\" value={volume} onChange={(event) => setVolume(Number(event.target.value))} className=\"w-12 accent-cyan-400 h-1 sm:h-1.5\" aria-label=\"Volume\" />
           </div>
         </div>
       </div>
-      <audio ref={audioRef} src={currentSong?.audio} preload="metadata" />
+      <audio ref={audioRef} src={currentSong?.audio} preload=\"metadata\" />
     </div>
   );
 }

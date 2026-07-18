@@ -107,13 +107,13 @@ export default function HomePage() {
 
   return (
     <div className="space-y-8">
-      <motion.section initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-purple-600/25 via-white/5 to-cyan-500/20 p-6 shadow-[0_0_60px_rgba(34,211,238,0.16)] backdrop-blur-xl md:p-8">
-        <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+      <motion.section initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl sm:rounded-[2rem] border border-white/10 bg-gradient-to-br from-purple-600/25 via-white/5 to-cyan-500/20 p-4 sm:p-6 md:p-8 shadow-[0_0_60px_rgba(34,211,238,0.16)] backdrop-blur-xl">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div>
-            <p className="text-sm uppercase tracking-[0.45em] text-cyan-300">MUSIC PLAYLIST MANAGER</p>
-            <p className="mt-1 text-xs text-slate-400">Built by Himanshu Kumar</p>
-            <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">Create, organize, and enjoy your music in one beautiful place.</h2>
-            <p className="mt-4 max-w-2xl text-slate-300">Discover your favorite tracks, build custom playlists, manage your music library, and enjoy a smooth listening experience with an elegant, responsive interface.</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-cyan-300 sm:text-sm sm:tracking-[0.45em]">MUSIC PLAYLIST MANAGER</p>
+            <p className="mt-1 text-xs text-slate-400">Built by Himanshu Kumar, Salman Khan</p>
+            <h2 className="mt-2 text-xl font-semibold text-white sm:mt-3 sm:text-2xl md:text-3xl lg:text-4xl">Create, organize, and enjoy your music in one beautiful place.</h2>
+            <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:mt-4">Discover your favorite tracks, build custom playlists, manage your music library, and enjoy a smooth listening experience with an elegant, responsive interface.</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-sm text-cyan-200">Live 3D visualizer</span>
               <span className="rounded-full border border-fuchsia-400/30 bg-fuchsia-400/10 px-3 py-1 text-sm text-fuchsia-200">Reactive player controls</span>
@@ -237,8 +237,8 @@ export default function HomePage() {
         </div>
       ) : null}
 
-      <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
-        <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <section className="rounded-2xl sm:rounded-[2rem] border border-white/10 bg-white/5 p-4 sm:p-6 backdrop-blur-xl">
+        <div className="mb-4 flex flex-col gap-3 sm:mb-5 sm:gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h3 className="text-xl font-semibold">Song Library</h3>
             <p className="text-sm text-slate-400">Search your tracks and build a cinematic mix in seconds.</p>
@@ -320,11 +320,11 @@ export default function HomePage() {
             </div>
           </form>
         ) : null}
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
           {visibleSongs.map((song, index) => (
             <motion.article key={song.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.03 }} className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/30 shadow-[0_20px_50px_rgba(15,23,42,0.35)] transition-transform duration-200 hover:-translate-y-1">
               <div className="relative overflow-hidden">
-                <img src={song.cover} alt={song.title} className="h-44 w-full object-cover transition duration-300 group-hover:scale-105" />
+                <img src={song.cover} alt={song.title} className="h-32 w-full object-cover transition duration-300 group-hover:scale-105 sm:h-40 md:h-44" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
               </div>
               <div className="p-4">
