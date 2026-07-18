@@ -75,8 +75,8 @@ function App() {
           <header className="sticky top-0 z-20 border-b border-white/10 bg-black/40 backdrop-blur-xl">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-8">
               <div>
-                <p className="text-sm uppercase tracking-[0.4em] text-cyan-300">DSA Playlist Lab</p>
-                <h1 className="text-xl font-semibold">Music Playlist Manager</h1>
+                <p className="text-sm uppercase tracking-[0.4em] text-cyan-300">Music Playlist Manager</p>
+                <h1 className="text-xl font-semibold"></h1>
               </div>
               <div className="flex items-center gap-3">
                 <nav className="flex gap-2 rounded-full border border-white/10 bg-white/5 p-1">
