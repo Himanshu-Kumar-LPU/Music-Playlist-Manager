@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# WASM
+emsdk/
+wasm/
+
+# Config files that don't need formatting
+package.json
+package-lock.json
+.eslintrc.json
+
+# Generated files
+*.log
