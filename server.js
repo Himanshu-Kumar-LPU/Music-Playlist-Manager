@@ -49,30 +49,31 @@ function sendEmail({ email, subject, text }) {
     return Promise.resolve({ fallback: true });
   }
 
-  const user = process.env.EMAIL_USER;
-  const pass = process.env.EMAIL_PASSWORD;
-  const service = process.env.EMAIL_SERVICE || 'gmail';
-  const host = process.env.SMTP_HOST;
-  const portConfig = Number(process.env.SMTP_PORT || 587);
-  const secure = process.env.SMTP_SECURE === 'true';
+  const sendgridApiKey = process.env.SENDGRID_API_KEY;
+  const emailUser = process.env.EMAIL_USER;
 
-  if (!user || !pass) {
-    throw new Error('EMAIL_USER and EMAIL_PASSWORD must be set in .env when DEV_EMAIL_FALLBACK is not enabled.');
+  if (!sendgridApiKey || !emailUser) {
+    throw new Error('SENDGRID_API_KEY and EMAIL_USER must be set in .env');
   }
 
-  const transportOptions = host
-    ? { host, port: portConfig, secure, auth: { user, pass } }
-    : { service, auth: { user, pass } };
-
-  const transporter = nodemailer.createTransport(transportOptions);
+  // Use SendGrid via nodemailer SMTP relay
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.sendgrid.net',
+    port: 587,
+    secure: false,
+    auth: {
+      user: 'apikey',
+      pass: sendgridApiKey,
+    },
+  });
 
   return transporter.sendMail({
-    from: `Music Playlist Manager <${user}>`,
+    from: `Music Playlist Manager <${emailUser}>`,
     to: email,
     subject,
     text,
   }).catch((error) => {
-    console.error('SMTP send failed:', error);
+    console.error('SendGrid send failed:', error);
     throw error;
   });
 }
