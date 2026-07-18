@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "node server.js",
-    "build:wasm": "cmd /c wasm\\build.cmd"
+    "build:wasm": "node scripts/build-wasm.js"
   },
   "dependencies": {
     "@react-three/drei": "^9.0.0",
