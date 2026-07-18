@@ -13,10 +13,18 @@ build/
 src/wasm/dsa.js
 src/wasm/dsa.wasm
 
-# Environment files
+# Environment files (NEVER commit credentials!)
 .env
 .env.local
 .env.*.local
+
+# Emscripten SDK (too large, install locally)
+emsdk/
+
+# User data and database files
+users.json
+*.db
+*.sqlite
 
 # IDE
 .vscode/
@@ -46,3 +54,4 @@ coverage/
 # Misc
 .cache/
 *.bak
+.git/emsdk
