@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { FaPlay, FaPause, FaForward, FaBackward, FaVolumeUp, FaRandom, FaRedo } from 'react-icons/fa';
 import { useMusic } from '../context/MusicContext';
 import { songs } from '../data/songs';
@@ -117,45 +117,33 @@ export default function PlayerBar() {
 
   const togglePlayback = () => setIsPlaying((prev) => !prev);
   
-  const handleNext = () => {
-    // Use playlist if available, otherwise all songs
-    const allSongs = songs.map((s) => s.id);
-    const list = playlistIds.length > 0 ? playlistIds : allSongs;
-    
+  const handleNext = useCallback(() => {
+    const list = playlistIds.length > 0 ? playlistIds : songs.map((s) => s.id);
     if (!list || list.length === 0) return;
     
-    const currentId = currentSong?.id;
-    const currentIndex = list.indexOf(currentId);
-    
-    // If current song found, play next
-    if (currentIndex !== -1 && currentIndex < list.length - 1) {
+    const currentIndex = list.indexOf(currentSong?.id);
+    if (currentIndex >= 0 && currentIndex < list.length - 1) {
+      // Play next song
       playSong(list[currentIndex + 1]);
-    } 
-    // If at end or song not found, start from first song
-    else if (currentIndex === list.length - 1 || currentIndex === -1) {
+    } else {
+      // Loop to first song
       playSong(list[0]);
     }
-  };
+  }, [songs, playlistIds, currentSong?.id, playSong]);
   
-  const handlePrev = () => {
-    // Use playlist if available, otherwise all songs
-    const allSongs = songs.map((s) => s.id);
-    const list = playlistIds.length > 0 ? playlistIds : allSongs;
-    
+  const handlePrev = useCallback(() => {
+    const list = playlistIds.length > 0 ? playlistIds : songs.map((s) => s.id);
     if (!list || list.length === 0) return;
     
-    const currentId = currentSong?.id;
-    const currentIndex = list.indexOf(currentId);
-    
-    // If current song found and not first, play previous
+    const currentIndex = list.indexOf(currentSong?.id);
     if (currentIndex > 0) {
+      // Play previous song
       playSong(list[currentIndex - 1]);
-    } 
-    // If at start or song not found, go to last song
-    else if (currentIndex === 0 || currentIndex === -1) {
+    } else {
+      // Loop to last song
       playSong(list[list.length - 1]);
     }
-  };
+  }, [songs, playlistIds, currentSong?.id, playSong]);
 
   const cycleRepeat = () => {
     const modes = ['off', 'one', 'all'];
