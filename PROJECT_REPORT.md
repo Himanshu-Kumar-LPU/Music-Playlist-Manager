@@ -403,7 +403,409 @@ MusicContext (Global State)
 
 ---
 
-## **11. FUTURE ENHANCEMENTS**
+## **11. REPRESENTATIVE CODE EXCERPTS**
+
+### **DoublyLinkedList Implementation (C++)**
+
+```cpp
+// wasm/DoublyLinkedList.h
+#ifndef DOUBLY_LINKED_LIST_H
+#define DOUBLY_LINKED_LIST_H
+
+class DoublyLinkedList {
+private:
+    struct Node {
+        int data;
+        Node* prev;
+        Node* next;
+        
+        Node(int value) : data(value), prev(nullptr), next(nullptr) {}
+    };
+    
+    Node* head;
+    Node* tail;
+    int size;
+
+public:
+    DoublyLinkedList() : head(nullptr), tail(nullptr), size(0) {}
+    
+    ~DoublyLinkedList() {
+        while (head) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+    
+    // Insert at end: O(1) operation
+    void insertAtEnd(int value) {
+        Node* newNode = new Node(value);
+        if (!tail) {
+            head = tail = newNode;
+        } else {
+            tail->next = newNode;
+            newNode->prev = tail;
+            tail = newNode;
+        }
+        size++;
+    }
+    
+    // Remove by ID: O(n) to locate, O(1) to remove
+    void removeById(int value) {
+        Node* current = head;
+        while (current) {
+            if (current->data == value) {
+                if (current->prev) current->prev->next = current->next;
+                else head = current->next;
+                
+                if (current->next) current->next->prev = current->prev;
+                else tail = current->prev;
+                
+                delete current;
+                size--;
+                return;
+            }
+            current = current->next;
+        }
+    }
+    
+    // Move to next: O(1) once node is known
+    Node* moveNext(Node* current) {
+        return current ? current->next : nullptr;
+    }
+    
+    // Move to previous: O(1) once node is known
+    Node* movePrev(Node* current) {
+        return current ? current->prev : nullptr;
+    }
+    
+    // Convert to array for JavaScript
+    std::vector<int> toArray() {
+        std::vector<int> result;
+        Node* current = head;
+        while (current) {
+            result.push_back(current->data);
+            current = current->next;
+        }
+        return result;
+    }
+    
+    int getSize() const { return size; }
+};
+
+#endif
+```
+
+**Use Case in Project:** Maintains playlist order. When a user adds a song to a playlist, it's appended in O(1) time. Reordering requires finding the node O(n), then updating prev/next pointers in O(1).
+
+---
+
+### **HashMap Implementation (C++)**
+
+```cpp
+// wasm/HashMap.h - Simple hash table for O(1) lookups
+#include <vector>
+#include <utility>
+
+class HashMap {
+private:
+    static const int CAPACITY = 101;
+    std::vector<std::pair<int, int>> buckets[CAPACITY];
+    
+    int hash(int key) {
+        return key % CAPACITY;
+    }
+
+public:
+    // Set value: O(1) average case
+    void set(int key, int value) {
+        int index = hash(key);
+        for (auto& pair : buckets[index]) {
+            if (pair.first == key) {
+                pair.second = value;
+                return;
+            }
+        }
+        buckets[index].push_back({key, value});
+    }
+    
+    // Get value: O(1) average case
+    int get(int key) {
+        int index = hash(key);
+        for (const auto& pair : buckets[index]) {
+            if (pair.first == key) {
+                return pair.second;
+            }
+        }
+        return -1; // not found
+    }
+    
+    // Check if key exists: O(1) average case
+    bool has(int key) {
+        int index = hash(key);
+        for (const auto& pair : buckets[index]) {
+            if (pair.first == key) return true;
+        }
+        return false;
+    }
+    
+    // Remove: O(1) average case
+    void remove(int key) {
+        int index = hash(key);
+        for (auto it = buckets[index].begin(); it != buckets[index].end(); ++it) {
+            if (it->first == key) {
+                buckets[index].erase(it);
+                return;
+            }
+        }
+    }
+};
+```
+
+**Use Case in Project:** Stores favorite songs for O(1) lookups. Instead of searching through a list, checking if song ID 42 is a favorite returns instantly from the HashMap.
+
+---
+
+### **Trie Implementation (C++) - Fast String Search**
+
+```cpp
+// wasm/Trie.h - For O(m) song search (m = query length)
+#include <unordered_map>
+
+class TrieNode {
+public:
+    std::unordered_map<char, TrieNode*> children;
+    bool isEndOfWord;
+    int songId; // store song ID at word end
+    
+    TrieNode() : isEndOfWord(false), songId(-1) {}
+};
+
+class Trie {
+private:
+    TrieNode* root;
+
+public:
+    Trie() : root(new TrieNode()) {}
+    
+    // Insert song title: O(m) where m = length of title
+    void insert(const std::string& word, int songId) {
+        TrieNode* current = root;
+        for (char c : word) {
+            char lower = tolower(c);
+            if (current->children.find(lower) == current->children.end()) {
+                current->children[lower] = new TrieNode();
+            }
+            current = current->children[lower];
+        }
+        current->isEndOfWord = true;
+        current->songId = songId;
+    }
+    
+    // Search for song: O(m) where m = query length
+    bool search(const std::string& word) {
+        TrieNode* current = root;
+        for (char c : word) {
+            char lower = tolower(c);
+            if (current->children.find(lower) == current->children.end()) {
+                return false;
+            }
+            current = current->children[lower];
+        }
+        return current->isEndOfWord;
+    }
+    
+    // Autocomplete - find all songs starting with prefix: O(m + n)
+    std::vector<int> autocomplete(const std::string& prefix) {
+        std::vector<int> results;
+        TrieNode* current = root;
+        
+        for (char c : prefix) {
+            char lower = tolower(c);
+            if (current->children.find(lower) == current->children.end()) {
+                return results;
+            }
+            current = current->children[lower];
+        }
+        
+        // DFS to collect all song IDs
+        dfs(current, results);
+        return results;
+    }
+    
+private:
+    void dfs(TrieNode* node, std::vector<int>& results) {
+        if (node->isEndOfWord) {
+            results.push_back(node->songId);
+        }
+        for (auto& pair : node->children) {
+            dfs(pair.second, results);
+        }
+    }
+};
+```
+
+**Use Case in Project:** When user types "Boh" to search for "Bohemian Rhapsody", the Trie finds it in O(3) time instead of searching through all 14 songs.
+
+---
+
+### **React Hook for WASM Integration (JavaScript)**
+
+```jsx
+// src/hooks/useWasm.jsx
+import { useEffect, useState } from 'react';
+
+export function useWasm() {
+    const [module, setModule] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                // Import the compiled WASM module
+                const wasmModule = await import('../wasm/dsa.js');
+                setModule(wasmModule.default);
+            } catch (err) {
+                setError(err);
+                console.error('Failed to load WASM module:', err);
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, []);
+
+    return { module, loading, error };
+}
+```
+
+**Use Case:** Dynamically loads the compiled C++ → WebAssembly data structures, making them available to React components via the `useMusic()` context.
+
+---
+
+### **Player Handler - Next/Previous Button Fix (JavaScript)**
+
+```jsx
+// src/components/PlayerBar.jsx - Fixed handlers for all songs
+
+const handleNext = useCallback(() => {
+    const fullList = songs.map((s) => s.id);
+    const list = playlistIds.length > 0 ? playlistIds : fullList;
+    
+    if (!list || list.length === 0) return;
+    
+    const currentId = currentSong?.id;
+    // Use findIndex for reliable ID matching (handles string/number conversion)
+    let currentIndex = list.findIndex((id) => String(id) === String(currentId));
+    
+    // If song not found, start from beginning
+    if (currentIndex === -1) {
+        currentIndex = 0;
+    } else {
+        // Move to next song, or loop to first with modulo operator
+        currentIndex = (currentIndex + 1) % list.length;
+    }
+    
+    playSong(list[currentIndex]);
+}, [songs, playlistIds, currentSong?.id, playSong]);
+
+const handlePrev = useCallback(() => {
+    const fullList = songs.map((s) => s.id);
+    const list = playlistIds.length > 0 ? playlistIds : fullList;
+    
+    if (!list || list.length === 0) return;
+    
+    const currentId = currentSong?.id;
+    let currentIndex = list.findIndex((id) => String(id) === String(currentId));
+    
+    // If song not found, start from end
+    if (currentIndex === -1) {
+        currentIndex = list.length - 1;
+    } else {
+        // Move to previous song, or loop to last with modulo operator
+        currentIndex = (currentIndex - 1 + list.length) % list.length;
+    }
+    
+    playSong(list[currentIndex]);
+}, [songs, playlistIds, currentSong?.id, playSong]);
+```
+
+**Key Improvements:**
+- `useCallback` ensures handlers update with latest state
+- `findIndex` with string comparison handles ID type conversion
+- Modulo operator (%) provides seamless looping
+- Works for all 14+ songs, not just 3
+
+---
+
+### **IndexedDB Blob Storage (JavaScript)**
+
+```js
+// src/utils/idbStorage.js - Store large audio files
+
+const DB_NAME = 'MusicPlaylistDB';
+const STORE_NAME = 'audioBlobs';
+const DB_VERSION = 1;
+
+let db;
+
+export async function initDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = (e) => {
+            db = e.target.result;
+            db.createObjectStore(STORE_NAME);
+        };
+        request.onsuccess = () => {
+            db = request.result;
+            resolve(db);
+        };
+        request.onerror = () => reject(request.error);
+    });
+}
+
+// Save audio blob: O(1) average insertion
+export async function saveBlob(key, blob) {
+    if (!db) await initDB();
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction([STORE_NAME], 'readwrite');
+        const store = transaction.objectStore(STORE_NAME);
+        const request = store.put(blob, key);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+    });
+}
+
+// Retrieve audio blob: O(1) average lookup
+export async function getBlob(key) {
+    if (!db) await initDB();
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction([STORE_NAME], 'readonly');
+        const store = transaction.objectStore(STORE_NAME);
+        const request = store.get(key);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+// Delete audio blob: O(1) average deletion
+export async function deleteBlob(key) {
+    if (!db) await initDB();
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction([STORE_NAME], 'readwrite');
+        const store = transaction.objectStore(STORE_NAME);
+        const request = store.delete(key);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+    });
+}
+```
+
+**Use Case:** Allows users to upload and play audio files larger than localStorage's 5-10MB limit. Each file is stored as a Blob in IndexedDB.
+
+---
+
+## **12. FUTURE ENHANCEMENTS**
 
 - [ ] User accounts with cloud storage (Firebase/AWS)
 - [ ] Playlist sharing and collaboration features
