@@ -119,14 +119,34 @@ export default function PlayerBar() {
   
   const handleNext = () => {
     const list = playlistIds.length > 0 ? playlistIds : songs.map((s) => s.id);
-    const nextIndex = list.indexOf(currentSong?.id) + 1;
-    if (list[nextIndex]) playSong(list[nextIndex]);
+    if (!list || list.length === 0) return;
+    
+    const currentId = currentSong?.id;
+    let currentIndex = list.indexOf(currentId);
+    
+    // If current song not in list, start from beginning
+    if (currentIndex === -1) currentIndex = -1;
+    
+    const nextIndex = currentIndex + 1;
+    if (nextIndex < list.length) {
+      playSong(list[nextIndex]);
+    }
   };
   
   const handlePrev = () => {
     const list = playlistIds.length > 0 ? playlistIds : songs.map((s) => s.id);
-    const prevIndex = list.indexOf(currentSong?.id) - 1;
-    if (list[prevIndex]) playSong(list[prevIndex]);
+    if (!list || list.length === 0) return;
+    
+    const currentId = currentSong?.id;
+    let currentIndex = list.indexOf(currentId);
+    
+    // If current song not in list, start from end
+    if (currentIndex === -1) currentIndex = list.length;
+    
+    const prevIndex = currentIndex - 1;
+    if (prevIndex >= 0) {
+      playSong(list[prevIndex]);
+    }
   };
 
   const cycleRepeat = () => {
