@@ -118,34 +118,42 @@ export default function PlayerBar() {
   const togglePlayback = () => setIsPlaying((prev) => !prev);
   
   const handleNext = () => {
-    const list = playlistIds.length > 0 ? playlistIds : songs.map((s) => s.id);
+    // Use playlist if available, otherwise all songs
+    const allSongs = songs.map((s) => s.id);
+    const list = playlistIds.length > 0 ? playlistIds : allSongs;
+    
     if (!list || list.length === 0) return;
     
     const currentId = currentSong?.id;
-    let currentIndex = list.indexOf(currentId);
+    const currentIndex = list.indexOf(currentId);
     
-    // If current song not in list, start from beginning
-    if (currentIndex === -1) currentIndex = -1;
-    
-    const nextIndex = currentIndex + 1;
-    if (nextIndex < list.length) {
-      playSong(list[nextIndex]);
+    // If current song found, play next
+    if (currentIndex !== -1 && currentIndex < list.length - 1) {
+      playSong(list[currentIndex + 1]);
+    } 
+    // If at end or song not found, start from first song
+    else if (currentIndex === list.length - 1 || currentIndex === -1) {
+      playSong(list[0]);
     }
   };
   
   const handlePrev = () => {
-    const list = playlistIds.length > 0 ? playlistIds : songs.map((s) => s.id);
+    // Use playlist if available, otherwise all songs
+    const allSongs = songs.map((s) => s.id);
+    const list = playlistIds.length > 0 ? playlistIds : allSongs;
+    
     if (!list || list.length === 0) return;
     
     const currentId = currentSong?.id;
-    let currentIndex = list.indexOf(currentId);
+    const currentIndex = list.indexOf(currentId);
     
-    // If current song not in list, start from end
-    if (currentIndex === -1) currentIndex = list.length;
-    
-    const prevIndex = currentIndex - 1;
-    if (prevIndex >= 0) {
-      playSong(list[prevIndex]);
+    // If current song found and not first, play previous
+    if (currentIndex > 0) {
+      playSong(list[currentIndex - 1]);
+    } 
+    // If at start or song not found, go to last song
+    else if (currentIndex === 0 || currentIndex === -1) {
+      playSong(list[list.length - 1]);
     }
   };
 

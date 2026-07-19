@@ -74,9 +74,12 @@ function App() {
           </div>
           <header className="sticky top-0 z-20 border-b border-white/10 bg-black/40 backdrop-blur-xl">
             <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-3 py-3 sm:px-4 sm:py-4 md:px-8">
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-xs uppercase tracking-[0.3em] text-cyan-300 sm:text-sm sm:tracking-[0.4em]">Music Playlist Manager</p>
-                <h1 className="text-lg font-semibold sm:text-xl"></h1>
+              <div className="flex min-w-0 flex-1 items-center gap-3">
+                <img src="/logoimage/image.png" alt="Logo" className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg" />
+                <div>
+                  <p className="truncate text-xs uppercase tracking-[0.3em] text-cyan-300 sm:text-sm sm:tracking-[0.4em]">Music Playlist Manager</p>
+                  <h1 className="text-lg font-semibold sm:text-xl"></h1>
+                </div>
               </div>
               <div className="flex shrink-0 items-center gap-2 sm:gap-3">
                 <nav className="flex gap-1 rounded-full border border-white/10 bg-white/5 p-1 overflow-x-auto">
