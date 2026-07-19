@@ -118,21 +118,15 @@ export default function PlayerBar() {
   const togglePlayback = () => setIsPlaying((prev) => !prev);
   
   const handleNext = () => {
-    if (!currentSong) return;
     const list = playlistIds.length > 0 ? playlistIds : songs.map((s) => s.id);
-    const currentIndex = list.indexOf(currentSong.id);
-    if (currentIndex >= 0 && currentIndex < list.length - 1) {
-      playSong(list[currentIndex + 1]);
-    }
+    const nextIndex = list.indexOf(currentSong?.id) + 1;
+    if (list[nextIndex]) playSong(list[nextIndex]);
   };
   
   const handlePrev = () => {
-    if (!currentSong) return;
     const list = playlistIds.length > 0 ? playlistIds : songs.map((s) => s.id);
-    const currentIndex = list.indexOf(currentSong.id);
-    if (currentIndex > 0) {
-      playSong(list[currentIndex - 1]);
-    }
+    const prevIndex = list.indexOf(currentSong?.id) - 1;
+    if (list[prevIndex]) playSong(list[prevIndex]);
   };
 
   const cycleRepeat = () => {
