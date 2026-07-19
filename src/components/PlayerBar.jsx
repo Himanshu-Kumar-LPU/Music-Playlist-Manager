@@ -118,31 +118,43 @@ export default function PlayerBar() {
   const togglePlayback = () => setIsPlaying((prev) => !prev);
   
   const handleNext = useCallback(() => {
-    const list = playlistIds.length > 0 ? playlistIds : songs.map((s) => s.id);
+    const fullList = songs.map((s) => s.id);
+    const list = playlistIds.length > 0 ? playlistIds : fullList;
+    
     if (!list || list.length === 0) return;
     
-    const currentIndex = list.indexOf(currentSong?.id);
-    if (currentIndex >= 0 && currentIndex < list.length - 1) {
-      // Play next song
-      playSong(list[currentIndex + 1]);
+    const currentId = currentSong?.id;
+    let currentIndex = list.findIndex((id) => String(id) === String(currentId));
+    
+    // If song not found, start from beginning
+    if (currentIndex === -1) {
+      currentIndex = 0;
     } else {
-      // Loop to first song
-      playSong(list[0]);
+      // Move to next song, or loop to first
+      currentIndex = (currentIndex + 1) % list.length;
     }
+    
+    playSong(list[currentIndex]);
   }, [songs, playlistIds, currentSong?.id, playSong]);
   
   const handlePrev = useCallback(() => {
-    const list = playlistIds.length > 0 ? playlistIds : songs.map((s) => s.id);
+    const fullList = songs.map((s) => s.id);
+    const list = playlistIds.length > 0 ? playlistIds : fullList;
+    
     if (!list || list.length === 0) return;
     
-    const currentIndex = list.indexOf(currentSong?.id);
-    if (currentIndex > 0) {
-      // Play previous song
-      playSong(list[currentIndex - 1]);
+    const currentId = currentSong?.id;
+    let currentIndex = list.findIndex((id) => String(id) === String(currentId));
+    
+    // If song not found, start from end
+    if (currentIndex === -1) {
+      currentIndex = list.length - 1;
     } else {
-      // Loop to last song
-      playSong(list[list.length - 1]);
+      // Move to previous song, or loop to last
+      currentIndex = (currentIndex - 1 + list.length) % list.length;
     }
+    
+    playSong(list[currentIndex]);
   }, [songs, playlistIds, currentSong?.id, playSong]);
 
   const cycleRepeat = () => {
