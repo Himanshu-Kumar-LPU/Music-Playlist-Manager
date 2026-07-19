@@ -118,15 +118,21 @@ export default function PlayerBar() {
   const togglePlayback = () => setIsPlaying((prev) => !prev);
   
   const handleNext = () => {
+    if (!currentSong) return;
     const list = playlistIds.length > 0 ? playlistIds : songs.map((s) => s.id);
-    const nextIndex = list.indexOf(currentSong?.id) + 1;
-    if (list[nextIndex]) playSong(list[nextIndex]);
+    const currentIndex = list.indexOf(currentSong.id);
+    if (currentIndex >= 0 && currentIndex < list.length - 1) {
+      playSong(list[currentIndex + 1]);
+    }
   };
   
   const handlePrev = () => {
+    if (!currentSong) return;
     const list = playlistIds.length > 0 ? playlistIds : songs.map((s) => s.id);
-    const prevIndex = list.indexOf(currentSong?.id) - 1;
-    if (list[prevIndex]) playSong(list[prevIndex]);
+    const currentIndex = list.indexOf(currentSong.id);
+    if (currentIndex > 0) {
+      playSong(list[currentIndex - 1]);
+    }
   };
 
   const cycleRepeat = () => {
@@ -147,10 +153,10 @@ export default function PlayerBar() {
         </div>
         <div className="flex flex-1 flex-col gap-2 lg:max-w-2xl">
           <div className="flex items-center justify-center gap-2 sm:gap-3">
-            <button className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-300 sm:p-2.5" onClick={handlePrev} aria-label="Previous"><FaBackward className="text-xs sm:text-sm" /></button>
-            <button className="rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 p-3 text-white shadow-lg shadow-cyan-500/20 transition hover:scale-105 sm:p-3.5" onClick={togglePlayback} aria-label="Play/Pause">{isPlaying ? <FaPause className="text-sm sm:text-base" /> : <FaPlay className="text-sm sm:text-base" />}</button>
-            <button className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-300 sm:p-2.5" onClick={handleNext} aria-label="Next"><FaForward className="text-xs sm:text-sm" /></button>
-            <button className="hidden rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-300 sm:flex" onClick={playNextQueued}>Up next</button>
+            <button type="button" className="rounded-full border border-white/10 bg-white/5 p-3 sm:p-2.5 text-slate-200 transition hover:border-cyan-400/40 hover:bg-white/10 active:scale-95 hover:text-cyan-300" onClick={handlePrev} aria-label="Previous song"><FaBackward className="text-sm sm:text-sm" /></button>
+            <button type="button" className="rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 p-3 sm:p-3.5 text-white shadow-lg shadow-cyan-500/20 transition hover:scale-105 active:scale-95" onClick={togglePlayback} aria-label="Play/Pause">{isPlaying ? <FaPause className="text-lg sm:text-base" /> : <FaPlay className="text-lg sm:text-base" />}</button>
+            <button type="button" className="rounded-full border border-white/10 bg-white/5 p-3 sm:p-2.5 text-slate-200 transition hover:border-cyan-400/40 hover:bg-white/10 active:scale-95 hover:text-cyan-300" onClick={handleNext} aria-label="Next song"><FaForward className="text-sm sm:text-sm" /></button>
+            <button type="button" className="hidden rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 transition hover:border-cyan-400/40 hover:bg-white/10 active:scale-95 hover:text-cyan-300 sm:flex" onClick={playNextQueued}>Up next</button>
           </div>
           <div className="flex items-center gap-1 text-xs text-slate-400 sm:gap-2 sm:text-sm">
             <span className="w-8 text-right sm:w-10">{formatTime(progress)}</span>
@@ -159,8 +165,8 @@ export default function PlayerBar() {
           </div>
         </div>
         <div className="flex items-center justify-end gap-2 sm:gap-3">
-          <button className={`rounded-full border border-white/10 bg-white/5 p-2 transition sm:p-2.5 ${repeatMode !== 'off' ? 'text-cyan-400' : 'text-slate-200'}`} onClick={cycleRepeat} aria-label="Repeat"><FaRedo className="text-xs sm:text-sm" /></button>
-          <button className={`rounded-full border border-white/10 bg-white/5 p-2 transition sm:p-2.5 ${shuffleEnabled ? 'text-cyan-400' : 'text-slate-200'}`} onClick={() => { setShuffleEnabled((prev) => !prev); shufflePlaylist(); }} aria-label="Shuffle"><FaRandom className="text-xs sm:text-sm" /></button>
+          <button type="button" className={`rounded-full border border-white/10 bg-white/5 p-3 sm:p-2.5 transition active:scale-95 ${repeatMode !== 'off' ? 'text-cyan-400' : 'text-slate-200'}`} onClick={cycleRepeat} aria-label="Repeat mode" title={`Repeat: ${repeatMode}`}><FaRedo className="text-sm sm:text-sm" /></button>
+          <button type="button" className={`rounded-full border border-white/10 bg-white/5 p-3 sm:p-2.5 transition active:scale-95 ${shuffleEnabled ? 'text-cyan-400' : 'text-slate-200'}`} onClick={() => { setShuffleEnabled((prev) => !prev); shufflePlaylist(); }} aria-label="Shuffle"><FaRandom className="text-sm sm:text-sm" /></button>
           <div className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 sm:flex">
             <FaVolumeUp className="text-xs text-slate-300 sm:text-sm" />
             <input type="range" min="0" max="1" step="0.05" value={volume} onChange={(event) => setVolume(Number(event.target.value))} className="h-1 w-12 accent-cyan-400 sm:h-1.5" aria-label="Volume" />
