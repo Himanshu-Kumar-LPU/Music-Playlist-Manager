@@ -9,9 +9,15 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "node server.js",
-    "build:wasm": "node scripts/build-wasm.js"
+    "build:wasm": "node scripts/build-wasm.js",
+    "build:android": "npm run build && npx cap copy android",
+    "open:android": "npx cap open android",
+    "sync:android": "npx cap sync android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.4.2",
+    "@capacitor/cli": "^8.4.2",
+    "@capacitor/core": "^8.4.2",
     "@react-three/drei": "^9.0.0",
     "@react-three/fiber": "^8.17.0",
     "dotenv": "^16.3.1",
